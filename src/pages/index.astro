@@ -19,9 +19,18 @@ import Layout from '../layouts/Layout.astro';
       <!-- Controls Column -->
       <section class="md:col-span-1 flex flex-col gap-4">
         <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-lg">
-          <div class="flex justify-between items-center mb-4">
+          <div class="flex justify-between items-center mb-3">
             <h2 class="font-bold text-white">Screens</h2>
             <button id="add-btn" class="btn btn-primary btn-xs rounded">Add Screen</button>
+          </div>
+
+          <!-- Alignment Options -->
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+            <span class="text-xs text-slate-400 font-semibold">Alignment</span>
+            <div class="join border border-slate-800 p-0.5 rounded bg-slate-950">
+              <button id="btn-align-center" class="btn btn-xs rounded join-item btn-ghost text-white btn-active">Center</button>
+              <button id="btn-align-bottom-left" class="btn btn-xs rounded join-item btn-ghost text-slate-400">Bottom-Left</button>
+            </div>
           </div>
           
           <!-- Screen inputs list -->
@@ -49,7 +58,7 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- Simple Footer -->
     <footer class="p-4 border-t border-slate-900 text-center text-xs text-slate-500">
-      <p>Compare screen dimensions by diagonal inches and aspect ratios. Overlaid from center.</p>
+      <p>Compare screen dimensions by diagonal inches and aspect ratios. Overlaid relative size.</p>
     </footer>
   </div>
 </Layout>
@@ -69,11 +78,15 @@ import Layout from '../layouts/Layout.astro';
     { id: "s2", diagonal: 5.5, aspectW: 16, aspectH: 9, color: "#ef4444" }
   ];
 
+  let alignMode: 'center' | 'bottom-left' = 'center';
+
   const colors = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
 
   const container = document.getElementById('screen-inputs')!;
   const addBtn = document.getElementById('add-btn')!;
   const canvas = document.getElementById('canvas-overlay')!;
+  const btnAlignCenter = document.getElementById('btn-align-center')!;
+  const btnAlignBottomLeft = document.getElementById('btn-align-bottom-left')!;
 
   function init() {
     // Load from local storage
@@ -81,13 +94,52 @@ import Layout from '../layouts/Layout.astro';
     if (stored) {
       screens = JSON.parse(stored);
     }
+
+    const storedAlign = localStorage.getItem('overlay_align');
+    if (storedAlign === 'center' || storedAlign === 'bottom-left') {
+      alignMode = storedAlign;
+    }
     
     addBtn.addEventListener('click', addScreen);
+
+    btnAlignCenter.addEventListener('click', () => {
+      alignMode = 'center';
+      saveAlign();
+      updateAlignButtons();
+      renderVisuals();
+    });
+
+    btnAlignBottomLeft.addEventListener('click', () => {
+      alignMode = 'bottom-left';
+      saveAlign();
+      updateAlignButtons();
+      renderVisuals();
+    });
+
+    updateAlignButtons();
     render();
   }
 
   function save() {
     localStorage.setItem('overlay_screens', JSON.stringify(screens));
+  }
+
+  function saveAlign() {
+    localStorage.setItem('overlay_align', alignMode);
+  }
+
+  function updateAlignButtons() {
+    if (alignMode === 'center') {
+      btnAlignCenter.classList.add('btn-active', 'text-white');
+      btnAlignCenter.classList.remove('text-slate-400');
+      btnAlignBottomLeft.classList.remove('btn-active', 'text-white');
+      btnAlignBottomLeft.classList.add('text-slate-400');
+    } else {
+      btnAlignBottomLeft.classList.add('btn-active', 'text-white');
+      btnAlignBottomLeft.classList.remove('text-slate-400');
+      btnAlignCenter.classList.remove('btn-active', 'text-white');
+      btnAlignCenter.classList.add('text-slate-400');
+    }
   }
 
   function addScreen() {
@@ -241,9 +293,15 @@ import Layout from '../layouts/Layout.astro';
       el.style.width = `${wPx}px`;
       el.style.height = `${hPx}px`;
       
-      // Center the overlay
-      el.style.left = `${(width - wPx) / 2}px`;
-      el.style.top = `${(height - hPx) / 2}px`;
+      // Position based on alignment mode
+      if (alignMode === 'center') {
+        el.style.left = `${(width - wPx) / 2}px`;
+        el.style.top = `${(height - hPx) / 2}px`;
+      } else {
+        // Bottom-Left
+        el.style.left = '20px';
+        el.style.top = `${height - hPx - 20}px`;
+      }
 
       el.innerHTML = `
         <div class="text-[9px] font-bold" style="color: ${item.color}">#${idx + 1} (${item.diagonal.toFixed(1)}")</div>
