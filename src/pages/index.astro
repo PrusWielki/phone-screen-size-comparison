@@ -1,1207 +1,269 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-// Phone Presets list
-const presets = [
-  { name: "iPhone 15 Pro Max / 14 Pro Max", diagonal: 6.7, aspectWidth: 19.5, aspectHeight: 9, resW: 2796, resH: 1290, color: "#3b82f6" },
-  { name: "iPhone 15 Pro / 15 / 14 Pro", diagonal: 6.1, aspectWidth: 19.5, aspectHeight: 9, resW: 2556, resH: 1179, color: "#ef4444" },
-  { name: "Samsung Galaxy S24 Ultra", diagonal: 6.8, aspectWidth: 19.5, aspectHeight: 9, resW: 3120, resH: 1440, color: "#10b981" },
-  { name: "Google Pixel 8 Pro", diagonal: 6.7, aspectWidth: 20, aspectHeight: 9, resW: 2992, resH: 1344, color: "#f59e0b" },
-  { name: "Nintendo Switch (OLED)", diagonal: 7.0, aspectWidth: 16, aspectHeight: 9, resW: 1280, resH: 720, color: "#8b5cf6" },
-  { name: "iPad Pro 11-inch", diagonal: 11.0, aspectWidth: 4.3, aspectHeight: 3, resW: 2388, resH: 1668, color: "#ec4899" },
-  { name: "Classic 16:9 Phone (e.g. iPhone 8)", diagonal: 4.7, aspectWidth: 16, aspectHeight: 9, resW: 1334, resH: 750, color: "#6b7280" }
-];
 ---
 
-<Layout title="ViziScreen - Phone Screen Size Comparison Tool">
-  <div class="min-h-screen flex flex-col">
-    <!-- Navigation Bar -->
-    <header class="navbar bg-base-900/60 backdrop-blur-xl border-b border-base-850 sticky top-0 z-50 px-4 md:px-8">
-      <div class="flex-1">
-        <a class="flex items-center gap-2 font-bold text-xl tracking-tight text-white select-none">
-          <span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-500/20">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
-            </svg>
-          </span>
-          <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-slate-400">ViziScreen</span>
-        </a>
-      </div>
-      <div class="flex-none gap-2">
-        <a href="https://github.com/PrusWielki/phone-screen-size-comparison" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm text-slate-300 gap-2 hover:text-white rounded-lg">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-          GitHub
-        </a>
-      </div>
+<Layout title="Screen Size Overlay Tool">
+  <div class="min-h-screen flex flex-col bg-slate-950 text-slate-100 font-sans">
+    
+    <!-- Simple Header -->
+    <header class="p-4 border-b border-slate-900 flex justify-between items-center max-w-6xl w-full mx-auto">
+      <h1 class="text-xl font-bold tracking-tight text-white">Screen Size Overlay</h1>
+      <a href="https://github.com/PrusWielki/phone-screen-size-comparison" target="_blank" rel="noopener noreferrer" class="text-xs text-slate-400 hover:text-white">
+        GitHub
+      </a>
     </header>
 
-    <!-- Main Dashboard -->
-    <main class="flex-grow max-w-[1440px] w-full mx-auto p-4 md:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
       
-      <!-- Side Configurator panel (lg:col-span-4) -->
-      <section class="lg:col-span-4 flex flex-col gap-6">
-        
-        <!-- Device List Panel -->
-        <div class="card bg-base-900 border border-base-800 shadow-xl backdrop-blur-md rounded-2xl">
-          <div class="card-body p-5">
-            <div class="flex items-center justify-between mb-2">
-              <h2 class="card-title text-base font-bold text-white tracking-wide uppercase">Active Devices</h2>
-              <button id="add-device-btn" class="btn btn-primary btn-sm gap-1 hover:scale-105 transition-all duration-200 shadow-md shadow-primary/20 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                Add
-              </button>
-            </div>
-            
-            <!-- Devices Scroll Container -->
-            <div id="device-list-container" class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
-              <!-- Dynamically rendered devices list will go here -->
-            </div>
+      <!-- Controls Column -->
+      <section class="md:col-span-1 flex flex-col gap-4">
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-lg">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="font-bold text-white">Screens</h2>
+            <button id="add-btn" class="btn btn-primary btn-xs rounded">Add Screen</button>
           </div>
-        </div>
-
-        <!-- Configuration Panel (Edits the selected device) -->
-        <div class="card bg-base-900 border border-base-800 shadow-xl backdrop-blur-md rounded-2xl">
-          <div class="card-body p-5">
-            <h2 class="card-title text-base font-bold text-white tracking-wide uppercase mb-3">
-              Configure Device
-            </h2>
-            
-            <form id="device-form" class="space-y-4" onsubmit="event.preventDefault();">
-              <!-- Device Name -->
-              <div class="form-control w-full">
-                <label class="label py-1"><span class="label-text text-slate-400 text-xs font-semibold">Device Name</span></label>
-                <input type="text" id="dev-name" class="input input-bordered input-md bg-base-950 text-white rounded-lg border-base-800 focus:border-indigo-500 w-full" placeholder="e.g. iPhone 15 Pro" />
-              </div>
-
-              <!-- Preset selector -->
-              <div class="form-control w-full">
-                <label class="label py-1"><span class="label-text text-slate-400 text-xs font-semibold">Autofill from Preset</span></label>
-                <select id="dev-preset" class="select select-bordered select-md bg-base-950 text-white rounded-lg border-base-800 focus:border-indigo-500 w-full">
-                  <option value="">-- Choose a phone preset --</option>
-                  {presets.map((p, idx) => (
-                    <option value={idx}>{p.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              <!-- Screen Diagonal Size (inches) -->
-              <div class="form-control w-full">
-                <div class="flex justify-between items-center py-1">
-                  <span class="label-text text-slate-400 text-xs font-semibold">Diagonal Size (inches)</span>
-                  <span id="diagonal-value" class="text-sm font-bold text-indigo-400">6.1"</span>
-                </div>
-                <div class="flex items-center gap-3">
-                  <input type="range" id="dev-diagonal-range" min="3" max="15" step="0.1" class="range range-primary range-xs flex-grow" />
-                  <input type="number" id="dev-diagonal-num" min="3" max="15" step="0.01" class="input input-bordered input-sm w-18 text-center bg-base-950 text-white font-bold rounded-lg border-base-800 focus:border-indigo-500" />
-                </div>
-              </div>
-
-              <!-- Aspect Ratio -->
-              <div class="form-control w-full">
-                <label class="label py-1"><span class="label-text text-slate-400 text-xs font-semibold">Aspect Ratio</span></label>
-                <div class="grid grid-cols-2 gap-3 mb-2">
-                  <div class="flex items-center gap-2">
-                    <span class="text-xs text-slate-500">W:</span>
-                    <input type="number" id="dev-aspect-w" min="1" step="0.1" class="input input-bordered input-sm bg-base-950 text-white rounded-lg border-base-800 text-center font-semibold focus:border-indigo-500 w-full" placeholder="Width" />
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="text-xs text-slate-500">H:</span>
-                    <input type="number" id="dev-aspect-h" min="1" step="0.1" class="input input-bordered input-sm bg-base-950 text-white rounded-lg border-base-800 text-center font-semibold focus:border-indigo-500 w-full" placeholder="Height" />
-                  </div>
-                </div>
-                <!-- Short aspect ratio presets -->
-                <div class="flex flex-wrap gap-1.5 mt-1">
-                  <button type="button" class="btn btn-xs btn-outline border-base-800 hover:border-indigo-500 hover:bg-indigo-500/10 hover:text-white rounded-md aspect-preset" data-w="19.5" data-h="9">19.5:9</button>
-                  <button type="button" class="btn btn-xs btn-outline border-base-800 hover:border-indigo-500 hover:bg-indigo-500/10 hover:text-white rounded-md aspect-preset" data-w="20" data-h="9">20:9</button>
-                  <button type="button" class="btn btn-xs btn-outline border-base-800 hover:border-indigo-500 hover:bg-indigo-500/10 hover:text-white rounded-md aspect-preset" data-w="16" data-h="9">16:9</button>
-                  <button type="button" class="btn btn-xs btn-outline border-base-800 hover:border-indigo-500 hover:bg-indigo-500/10 hover:text-white rounded-md aspect-preset" data-w="4" data-h="3">4:3</button>
-                  <button type="button" class="btn btn-xs btn-outline border-base-800 hover:border-indigo-500 hover:bg-indigo-500/10 hover:text-white rounded-md aspect-preset" data-w="1" data-h="1">1:1</button>
-                </div>
-              </div>
-
-              <!-- Resolution (Optional) -->
-              <div class="collapse collapse-arrow bg-base-950 border border-base-800/40 rounded-xl">
-                <input type="checkbox" id="resolution-toggle" /> 
-                <div class="collapse-title text-xs font-semibold text-slate-400 flex items-center gap-1.5 py-3 min-h-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.679c.27.3.702.476 1.155.476h7.587c.08 0 .16.023.23.066l1.356.815c.145.087.31.133.477.133h7.587c.453 0 .885-.176 1.155-.476l2.1-2.333A2.25 2.25 0 0 0 22.5 13.5V6.75A2.25 2.25 0 0 0 20.25 4.5H3.75A2.25 2.25 0 0 0 1.5 6.75v6.75a2.25 2.25 0 0 0 .75 1.679Z" />
-                  </svg>
-                  Screen Resolution (Optional)
-                </div>
-                <div class="collapse-content pb-4">
-                  <div class="grid grid-cols-2 gap-3">
-                    <div>
-                      <label class="label py-0.5"><span class="label-text-alt text-slate-500 text-[10px]">Pixels Wide</span></label>
-                      <input type="number" id="dev-res-w" class="input input-bordered input-sm bg-base-900 text-white rounded-md border-base-800 focus:border-indigo-500 text-center w-full" placeholder="e.g. 2556" />
-                    </div>
-                    <div>
-                      <label class="label py-0.5"><span class="label-text-alt text-slate-500 text-[10px]">Pixels High</span></label>
-                      <input type="number" id="dev-res-h" class="input input-bordered input-sm bg-base-900 text-white rounded-md border-base-800 focus:border-indigo-500 text-center w-full" placeholder="e.g. 1179" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Color picker -->
-              <div class="form-control w-full">
-                <label class="label py-1"><span class="label-text text-slate-400 text-xs font-semibold">Overlay Border Color</span></label>
-                <div class="flex items-center gap-3">
-                  <input type="color" id="dev-color" class="w-10 h-10 border border-base-800 bg-transparent rounded-lg cursor-pointer flex-shrink-0" value="#3b82f6" />
-                  <div class="flex flex-wrap gap-1.5">
-                    <button type="button" class="w-6 h-6 rounded-full border border-base-900 bg-[#3b82f6] color-preset" data-color="#3b82f6"></button>
-                    <button type="button" class="w-6 h-6 rounded-full border border-base-900 bg-[#ef4444] color-preset" data-color="#ef4444"></button>
-                    <button type="button" class="w-6 h-6 rounded-full border border-base-900 bg-[#10b981] color-preset" data-color="#10b981"></button>
-                    <button type="button" class="w-6 h-6 rounded-full border border-base-900 bg-[#f59e0b] color-preset" data-color="#f59e0b"></button>
-                    <button type="button" class="w-6 h-6 rounded-full border border-base-900 bg-[#8b5cf6] color-preset" data-color="#8b5cf6"></button>
-                    <button type="button" class="w-6 h-6 rounded-full border border-base-900 bg-[#ec4899] color-preset" data-color="#ec4899"></button>
-                  </div>
-                </div>
-              </div>
-            </form>
+          
+          <!-- Screen inputs list -->
+          <div id="screen-inputs" class="space-y-4">
+            <!-- Rendered dynamically -->
           </div>
         </div>
       </section>
 
-      <!-- Main Visualizer Area (lg:col-span-8) -->
-      <section class="lg:col-span-8 flex flex-col gap-6">
-        
-        <!-- View Options & Controls -->
-        <div class="card bg-base-900 border border-base-800 shadow-xl backdrop-blur-md rounded-2xl">
-          <div class="card-body p-4 md:p-5 flex flex-col gap-4">
-            
-            <!-- Controls Layout -->
-            <div class="flex flex-wrap gap-4 items-center justify-between">
-              
-              <!-- Tab View Modes -->
-              <div class="flex flex-col gap-1.5">
-                <span class="text-slate-400 text-xs font-semibold tracking-wider uppercase">View Layout</span>
-                <div id="view-mode-tabs" class="tabs tabs-boxed bg-base-950 p-1 border border-base-800/40 rounded-xl">
-                  <button class="tab tab-sm rounded-lg active text-white" data-mode="overlay">Overlay Stack</button>
-                  <button class="tab tab-sm rounded-lg text-slate-400" data-mode="side-by-side">Side by Side</button>
-                </div>
-              </div>
-
-              <!-- Alignment selector (only visible for Overlay) -->
-              <div id="alignment-control-group" class="flex flex-col gap-1.5">
-                <span class="text-slate-400 text-xs font-semibold tracking-wider uppercase">Stack Alignment</span>
-                <div id="align-tabs" class="tabs tabs-boxed bg-base-950 p-1 border border-base-800/40 rounded-xl">
-                  <button class="tab tab-sm rounded-lg text-slate-400" data-align="top-left">Top-Left</button>
-                  <button class="tab tab-sm rounded-lg active text-white" data-align="center">Center</button>
-                  <button class="tab tab-sm rounded-lg text-slate-400" data-align="bottom-left">Bottom-Left</button>
-                </div>
-              </div>
-
-              <!-- Display Scale Mode -->
-              <div class="flex flex-col gap-1.5">
-                <span class="text-slate-400 text-xs font-semibold tracking-wider uppercase">Display Scale</span>
-                <div id="scale-tabs" class="tabs tabs-boxed bg-base-950 p-1 border border-base-800/40 rounded-xl">
-                  <button class="tab tab-sm rounded-lg active text-white" data-scale="fit">Fit Container</button>
-                  <button class="tab tab-sm rounded-lg text-slate-400" data-scale="real">Physical (1:1)</button>
-                </div>
-              </div>
-
-              <!-- Settings (Notches toggle, Bezels) -->
-              <div class="flex flex-col gap-1.5">
-                <span class="text-slate-400 text-xs font-semibold tracking-wider uppercase">Bezel & Notches</span>
-                <label class="label cursor-pointer bg-base-950 px-3 py-1.5 rounded-xl border border-base-800/40 flex gap-2">
-                  <span class="label-text text-slate-300 text-xs font-semibold">Render Bezels</span> 
-                  <input type="checkbox" id="render-bezels-chk" checked class="checkbox checkbox-primary checkbox-xs rounded" />
-                </label>
-              </div>
-
-            </div>
-
-            <!-- Calibration Card (Visible only when scale mode is "real") -->
-            <div id="calibration-container" class="hidden transition-all duration-300 border border-indigo-900/50 bg-indigo-950/20 p-4 rounded-xl">
-              <div class="flex flex-col md:flex-row gap-6 items-center">
-                <!-- Graphical Credit Card -->
-                <div class="flex-shrink-0">
-                  <div id="virtual-credit-card" class="relative rounded-xl bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-800 border border-indigo-500/30 shadow-2xl p-4 flex flex-col justify-between overflow-hidden" style="width: 324px; height: 204px;">
-                    <!-- Card overlay highlights -->
-                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-500/20 via-transparent to-transparent pointer-events-none"></div>
-                    <!-- Card Top -->
-                    <div class="flex justify-between items-start z-10">
-                      <div class="flex items-center gap-1.5">
-                        <div class="w-6 h-6 rounded-md bg-indigo-500/30 flex items-center justify-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-indigo-400">
-                            <path fill-rule="evenodd" d="M2.25 6A2.25 2.25 0 0 1 4.5 3.75h15A2.25 2.25 0 0 1 21.75 6v12a2.25 2.25 0 0 1-2.25 2.25h-15A2.25 2.25 0 0 1 2.25 18V6Zm3 3a.75.75 0 0 0 0 1.5h2.25a.75.75 0 0 0 0-1.5H5.25Zm0 3a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5H5.25Zm0 3a.75.75 0 0 0 0 1.5h6.75a.75.75 0 0 0 0-1.5H5.25Z" clip-rule="evenodd" />
-                          </svg>
-                        </div>
-                        <span class="text-[10px] uppercase font-bold tracking-widest text-slate-300">Calibration Standard</span>
-                      </div>
-                      <div class="w-8 h-6 rounded bg-slate-800/80 border border-slate-700 flex items-center justify-center">
-                        <!-- Card chip -->
-                        <div class="w-5 h-4 bg-yellow-600/60 rounded border border-yellow-500/80"></div>
-                      </div>
-                    </div>
-                    <!-- Card Middle -->
-                    <div class="z-10 my-2">
-                      <div class="text-xs text-slate-400 tracking-wider">Place Physical Card Here</div>
-                      <div class="text-sm font-bold text-white tracking-widest mt-0.5">85.6 mm x 54.0 mm</div>
-                    </div>
-                    <!-- Card Bottom -->
-                    <div class="flex justify-between items-end z-10">
-                      <span class="text-[9px] uppercase tracking-wider text-indigo-400">3.37 inches wide</span>
-                      <div class="flex gap-1">
-                        <div class="w-5 h-5 rounded-full bg-slate-700/60 flex-shrink-0"></div>
-                        <div class="w-5 h-5 rounded-full bg-slate-600/40 -ml-2.5 flex-shrink-0"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Calibration explanation and slider -->
-                <div class="flex-grow space-y-3">
-                  <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-indigo-400">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286Zm0 13.036h.008v.008H12v-.008Z" />
-                    </svg>
-                    Calibrate Screen Size (PPI)
-                  </h3>
-                  <p class="text-xs text-slate-400 leading-relaxed">
-                    To show screen sizes accurately at 1:1 scale, place a standard credit card (or ID card) against your screen and adjust the slider below until the virtual card matches the physical one's width exactly.
-                  </p>
-                  <div class="form-control">
-                    <div class="flex justify-between text-xs font-semibold py-1">
-                      <span class="text-slate-500">Calibration Slider</span>
-                      <span id="ppi-value" class="text-indigo-400 font-bold">96 PPI</span>
-                    </div>
-                    <input type="range" id="calibration-slider" min="60" max="220" value="96" class="range range-indigo range-xs" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Visualization Canvas -->
-            <div class="relative w-full h-[450px] md:h-[500px] bg-slate-950 border border-base-800 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
-              
-              <!-- Subtle blueprint / graph grid background -->
-              <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-              
-              <!-- Center lines -->
-              <div class="absolute inset-x-0 top-1/2 h-[1px] bg-white/5 pointer-events-none"></div>
-              <div class="absolute inset-y-0 left-1/2 w-[1px] bg-white/5 pointer-events-none"></div>
-
-              <!-- Main canvas containing the rendered screens -->
-              <div id="visual-canvas" class="relative w-full h-full overflow-auto flex items-center justify-center">
-                <!-- Screens will be inserted here dynamically -->
-              </div>
-              
-              <!-- Empty state message -->
-              <div id="empty-canvas-msg" class="hidden absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-slate-950/80 z-10">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-slate-600 mb-2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-                </svg>
-                <p class="text-sm text-slate-500 font-medium">No active devices selected. Toggle or add a device to view.</p>
-              </div>
-
-            </div>
-
-            <!-- Comparison Summary Sentence -->
-            <div id="comparison-alert" class="alert bg-base-950/40 border border-base-800/40 text-xs text-slate-300 rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-indigo-400 shrink-0">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
-              </svg>
-              <span id="comparison-summary-text">Compare devices to see screen area differences.</span>
-            </div>
-
+      <!-- Visualization Column -->
+      <section class="md:col-span-2 flex flex-col gap-4">
+        <!-- Visual Canvas -->
+        <div class="relative w-full h-[400px] md:h-[500px] bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
+          <!-- Dot grid background -->
+          <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none"></div>
+          
+          <!-- Screens wrapper -->
+          <div id="canvas-overlay" class="relative w-full h-full flex items-center justify-center">
+            <!-- Overlaid rectangles go here -->
           </div>
         </div>
-
-        <!-- Stats and Table Comparison -->
-        <div class="card bg-base-900 border border-base-800 shadow-xl backdrop-blur-md rounded-2xl">
-          <div class="card-body p-5">
-            <h2 class="card-title text-base font-bold text-white tracking-wide uppercase mb-3">
-              Detailed Specifications
-            </h2>
-            
-            <div class="overflow-x-auto border border-base-800/80 rounded-xl bg-base-950">
-              <table class="table w-full text-xs text-slate-300">
-                <thead>
-                  <tr class="border-b border-base-800 bg-base-900/40">
-                    <th class="text-slate-400 font-bold">Device Name</th>
-                    <th class="text-slate-400 font-bold text-center">Diagonal</th>
-                    <th class="text-slate-400 font-bold text-center">Aspect Ratio</th>
-                    <th class="text-slate-400 font-bold text-center">Dimensions (Width x Height)</th>
-                    <th class="text-slate-400 font-bold text-center">Screen Area</th>
-                    <th class="text-slate-400 font-bold text-center">Sharpness (PPI)</th>
-                  </tr>
-                </thead>
-                <tbody id="stats-table-body">
-                  <!-- Dynamic specifications rows will be inserted here -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
       </section>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="footer footer-center p-6 bg-base-950/40 text-slate-500 border-t border-base-800 mt-auto text-xs">
-      <aside>
-        <p>© 2026 ViziScreen. Designed for visual precision and screen comparison.</p>
-        <p class="mt-1 text-slate-600">Built with Astro, Tailwind CSS, and DaisyUI. Fully responsive, local storage saved.</p>
-      </aside>
+    <!-- Simple Footer -->
+    <footer class="p-4 border-t border-slate-900 text-center text-xs text-slate-500">
+      <p>Compare screen dimensions by diagonal inches and aspect ratios. Overlaid from center.</p>
     </footer>
   </div>
 </Layout>
 
 <script>
-  // Device Interfaces & presets
-  interface Device {
+  interface Screen {
     id: string;
-    name: string;
     diagonal: number;
-    aspectWidth: number;
-    aspectHeight: number;
-    resW?: number;
-    resH?: number;
+    aspectW: number;
+    aspectH: number;
     color: string;
-    visible: boolean;
   }
 
-  // Pre-configured phone presets
-  const DEVICE_PRESETS = [
-    { name: "iPhone 15 Pro Max / 14 Pro Max", diagonal: 6.7, aspectWidth: 19.5, aspectHeight: 9, resW: 2796, resH: 1290, color: "#3b82f6" },
-    { name: "iPhone 15 Pro / 15 / 14 Pro", diagonal: 6.1, aspectWidth: 19.5, aspectHeight: 9, resW: 2556, resH: 1179, color: "#ef4444" },
-    { name: "Samsung Galaxy S24 Ultra", diagonal: 6.8, aspectWidth: 19.5, aspectHeight: 9, resW: 3120, resH: 1440, color: "#10b981" },
-    { name: "Google Pixel 8 Pro", diagonal: 6.7, aspectWidth: 20, aspectHeight: 9, resW: 2992, resH: 1344, color: "#f59e0b" },
-    { name: "Nintendo Switch (OLED)", diagonal: 7.0, aspectWidth: 16, aspectHeight: 9, resW: 1280, resH: 720, color: "#8b5cf6" },
-    { name: "iPad Pro 11-inch", diagonal: 11.0, aspectWidth: 4.3, aspectHeight: 3, resW: 2388, resH: 1668, color: "#ec4899" },
-    { name: "Classic 16:9 Phone (e.g. iPhone 8)", diagonal: 4.7, aspectWidth: 16, aspectHeight: 9, resW: 1334, resH: 750, color: "#6b7280" }
+  // Pre-configured starting screens
+  let screens: Screen[] = [
+    { id: "s1", diagonal: 6.7, aspectW: 19.5, aspectH: 9, color: "#3b82f6" },
+    { id: "s2", diagonal: 5.5, aspectW: 16, aspectH: 9, color: "#ef4444" }
   ];
 
-  // Default starting devices if LocalStorage is empty
-  const DEFAULT_DEVICES: Device[] = [
-    {
-      id: "dev-1",
-      name: "iPhone 15 Pro Max",
-      diagonal: 6.7,
-      aspectWidth: 19.5,
-      aspectHeight: 9,
-      resW: 2796,
-      resH: 1290,
-      color: "#3b82f6",
-      visible: true
-    },
-    {
-      id: "dev-2",
-      name: "iPhone SE (16:9)",
-      diagonal: 4.7,
-      aspectWidth: 16,
-      aspectHeight: 9,
-      resW: 1334,
-      resH: 750,
-      color: "#ef4444",
-      visible: true
-    }
-  ];
+  const colors = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
 
-  // State Management
-  let devices: Device[] = [];
-  let selectedDeviceId: string | null = null;
-  let viewMode: 'overlay' | 'side-by-side' = 'overlay';
-  let alignment: 'center' | 'bottom-left' | 'top-left' = 'center';
-  let scaleMode: 'fit' | 'real' = 'fit';
-  let calibratedPPI = 96;
-  let renderBezels = true;
+  const container = document.getElementById('screen-inputs')!;
+  const addBtn = document.getElementById('add-btn')!;
+  const canvas = document.getElementById('canvas-overlay')!;
 
-  // DOM Elements
-  const deviceListContainer = document.getElementById('device-list-container')!;
-  const addDeviceBtn = document.getElementById('add-device-btn')!;
-  const visualCanvas = document.getElementById('visual-canvas')!;
-  const emptyCanvasMsg = document.getElementById('empty-canvas-msg')!;
-  const statsTableBody = document.getElementById('stats-table-body')!;
-  const comparisonSummaryText = document.getElementById('comparison-summary-text')!;
-  const calibrationContainer = document.getElementById('calibration-container')!;
-  const virtualCreditCard = document.getElementById('virtual-credit-card')!;
-  const calibrationSlider = document.getElementById('calibration-slider') as HTMLInputElement;
-  const ppiValueLabel = document.getElementById('ppi-value')!;
-
-  // Form Elements
-  const deviceForm = document.getElementById('device-form') as HTMLFormElement;
-  const devNameInput = document.getElementById('dev-name') as HTMLInputElement;
-  const devPresetSelect = document.getElementById('dev-preset') as HTMLSelectElement;
-  const devDiagonalRange = document.getElementById('dev-diagonal-range') as HTMLInputElement;
-  const devDiagonalNum = document.getElementById('dev-diagonal-num') as HTMLInputElement;
-  const diagonalValueText = document.getElementById('diagonal-value')!;
-  const devAspectWInput = document.getElementById('dev-aspect-w') as HTMLInputElement;
-  const devAspectHInput = document.getElementById('dev-aspect-h') as HTMLInputElement;
-  const devResWInput = document.getElementById('dev-res-w') as HTMLInputElement;
-  const devResHInput = document.getElementById('dev-res-h') as HTMLInputElement;
-  const devColorInput = document.getElementById('dev-color') as HTMLInputElement;
-  const renderBezelsChk = document.getElementById('render-bezels-chk') as HTMLInputElement;
-
-  // Initial State Setup
   function init() {
-    // Load from LocalStorage
-    const storedDevices = localStorage.getItem('vizi_devices');
-    const storedPPI = localStorage.getItem('vizi_calibrated_ppi');
-    const storedViewMode = localStorage.getItem('vizi_view_mode');
-    const storedAlign = localStorage.getItem('vizi_align');
-    const storedScale = localStorage.getItem('vizi_scale');
-    const storedBezels = localStorage.getItem('vizi_bezels');
-
-    if (storedDevices) {
-      devices = JSON.parse(storedDevices);
-    } else {
-      devices = [...DEFAULT_DEVICES];
+    // Load from local storage
+    const stored = localStorage.getItem('overlay_screens');
+    if (stored) {
+      screens = JSON.parse(stored);
     }
-
-    if (storedPPI) {
-      calibratedPPI = parseInt(storedPPI, 10);
-      calibrationSlider.value = calibratedPPI.toString();
-      ppiValueLabel.textContent = `${calibratedPPI} PPI`;
-    }
-
-    if (storedViewMode) viewMode = storedViewMode as any;
-    if (storedAlign) alignment = storedAlign as any;
-    if (storedScale) scaleMode = storedScale as any;
-    if (storedBezels) {
-      renderBezels = storedBezels === 'true';
-      renderBezelsChk.checked = renderBezels;
-    }
-
-    // Set active tab buttons based on loaded state
-    updateTabsState();
-
-    // Set first device as active to configure
-    if (devices.length > 0) {
-      selectedDeviceId = devices[0].id;
-    }
-
-    setupEventListeners();
-    updateUI();
-  }
-
-  // Update tabs visual active states
-  function updateTabsState() {
-    // View mode
-    document.querySelectorAll('#view-mode-tabs .tab').forEach(t => {
-      const mode = (t as HTMLButtonElement).dataset.mode;
-      if (mode === viewMode) {
-        t.classList.add('active', 'text-white');
-      } else {
-        t.classList.remove('active', 'text-white');
-      }
-    });
-
-    // Alignment
-    const alignmentControlGroup = document.getElementById('alignment-control-group')!;
-    if (viewMode === 'side-by-side') {
-      alignmentControlGroup.classList.add('opacity-30', 'pointer-events-none');
-    } else {
-      alignmentControlGroup.classList.remove('opacity-30', 'pointer-events-none');
-    }
-    document.querySelectorAll('#align-tabs .tab').forEach(t => {
-      const align = (t as HTMLButtonElement).dataset.align;
-      if (align === alignment) {
-        t.classList.add('active', 'text-white');
-      } else {
-        t.classList.remove('active', 'text-white');
-      }
-    });
-
-    // Scale
-    document.querySelectorAll('#scale-tabs .tab').forEach(t => {
-      const scale = (t as HTMLButtonElement).dataset.scale;
-      if (scale === scaleMode) {
-        t.classList.add('active', 'text-white');
-      } else {
-        t.classList.remove('active', 'text-white');
-      }
-    });
-
-    if (scaleMode === 'real') {
-      calibrationContainer.classList.remove('hidden');
-    } else {
-      calibrationContainer.classList.add('hidden');
-    }
-  }
-
-  // Save state to LocalStorage
-  function saveState() {
-    localStorage.setItem('vizi_devices', JSON.stringify(devices));
-    localStorage.setItem('vizi_calibrated_ppi', calibratedPPI.toString());
-    localStorage.setItem('vizi_view_mode', viewMode);
-    localStorage.setItem('vizi_align', alignment);
-    localStorage.setItem('vizi_scale', scaleMode);
-    localStorage.setItem('vizi_bezels', renderBezels.toString());
-  }
-
-  // Math helper calculations
-  function calculateDimensions(device: Device) {
-    const wRatio = device.aspectWidth;
-    const hRatio = device.aspectHeight;
-    const d = device.diagonal;
     
-    // We assume portrait orientation: height is longer than width
-    const sideA = wRatio;
-    const sideB = hRatio;
-    const ratio = Math.max(sideA, sideB) / Math.min(sideA, sideB);
+    addBtn.addEventListener('click', addScreen);
+    render();
+  }
 
-    // Height is longer side, Width is shorter side
-    const heightInches = d * ratio / Math.sqrt(ratio * ratio + 1);
-    const widthInches = d / Math.sqrt(ratio * ratio + 1);
-    const areaSqInches = widthInches * heightInches;
+  function save() {
+    localStorage.setItem('overlay_screens', JSON.stringify(screens));
+  }
 
-    const heightCm = heightInches * 2.54;
-    const widthCm = widthInches * 2.54;
-    const areaSqCm = areaSqInches * 6.4516;
+  function addScreen() {
+    const nextColor = colors[screens.length % colors.length];
+    screens.push({
+      id: `s-${Date.now()}`,
+      diagonal: 6.0,
+      aspectW: 16,
+      aspectH: 9,
+      color: nextColor
+    });
+    render();
+  }
 
-    // PPI
-    let ppi = 0;
-    if (device.resW && device.resH) {
-      ppi = Math.sqrt(device.resW * device.resW + device.resH * device.resH) / d;
+  function deleteScreen(id: string) {
+    screens = screens.filter(s => s.id !== id);
+    render();
+  }
+
+  function updateScreen(id: string, field: keyof Screen, value: any) {
+    const screen = screens.find(s => s.id === id);
+    if (screen) {
+      (screen as any)[field] = value;
+      save();
+      renderVisuals();
     }
-
-    return {
-      widthInches,
-      heightInches,
-      areaSqInches,
-      widthCm,
-      heightCm,
-      areaSqCm,
-      ppi,
-      ratioStr: `${ratio.toFixed(2)}:1`
-    };
   }
 
-  // Update whole UI
-  function updateUI() {
-    renderDeviceList();
-    renderConfigurator();
-    renderVisualization();
-    renderStatsTable();
-    updateComparisonSummary();
-    saveState();
-  }
-
-  // Render Left Column Device list
-  function renderDeviceList() {
-    deviceListContainer.innerHTML = '';
+  // Compute physical dimensions
+  function getDims(s: Screen) {
+    const d = s.diagonal;
+    const wRatio = s.aspectW;
+    const hRatio = s.aspectH;
     
-    devices.forEach((device) => {
-      const isSelected = device.id === selectedDeviceId;
-      const dims = calculateDimensions(device);
-      
-      const item = document.createElement('div');
-      item.className = `group flex items-center justify-between p-3 rounded-xl border transition-all duration-200 cursor-pointer ${
-        isSelected 
-          ? 'bg-base-950 border-indigo-500/50 shadow-md shadow-indigo-500/5' 
-          : 'bg-base-950/40 border-base-800 hover:border-slate-700'
-      }`;
-      
-      item.addEventListener('click', () => {
-        selectedDeviceId = device.id;
-        updateUI();
-      });
+    // Compute aspect ratio as decimal
+    const r = wRatio / hRatio;
+    
+    // w^2 + h^2 = d^2  and  w = r * h
+    // (r*h)^2 + h^2 = d^2 => h^2 * (r^2 + 1) = d^2
+    const h = d / Math.sqrt(r * r + 1);
+    const w = r * h;
+    const area = w * h;
 
-      item.innerHTML = `
-        <div class="flex items-center gap-3">
-          <div class="w-3 h-8 rounded-full flex-shrink-0" style="background-color: ${device.color};"></div>
-          
-          <div class="min-w-0">
-            <p class="text-xs font-bold text-white truncate">${device.name || 'Unnamed Device'}</p>
-            <p class="text-[10px] text-slate-500 font-semibold mt-0.5">
-              ${device.diagonal.toFixed(1)}" • ${device.aspectWidth}:${device.aspectHeight} 
-              <span class="text-slate-600">(${dims.widthInches.toFixed(1)}x${dims.heightInches.toFixed(1)}")</span>
-            </p>
+    return { w, h, area };
+  }
+
+  function render() {
+    save();
+    renderInputs();
+    renderVisuals();
+  }
+
+  function renderInputs() {
+    container.innerHTML = '';
+    
+    screens.forEach((s, idx) => {
+      const card = document.createElement('div');
+      card.className = "p-3 bg-slate-950 border border-slate-800 rounded-lg space-y-3 relative";
+      
+      card.innerHTML = `
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-bold text-white">Screen #${idx + 1}</span>
+          <button class="text-slate-500 hover:text-red-400 text-[10px] btn-del" data-id="${s.id}">Delete</button>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-[10px] text-slate-500 mb-0.5">Diagonal (in)</label>
+            <input type="number" step="0.1" class="input input-bordered input-xs w-full text-center font-bold bg-slate-900 border-slate-800 inp-diag" data-id="${s.id}" value="${s.diagonal}">
+          </div>
+          <div>
+            <label class="block text-[10px] text-slate-500 mb-0.5">Aspect W</label>
+            <input type="number" step="0.1" class="input input-bordered input-xs w-full text-center bg-slate-900 border-slate-800 inp-w" data-id="${s.id}" value="${s.aspectW}">
+          </div>
+          <div>
+            <label class="block text-[10px] text-slate-500 mb-0.5">Aspect H</label>
+            <input type="number" step="0.1" class="input input-bordered input-xs w-full text-center bg-slate-900 border-slate-800 inp-h" data-id="${s.id}" value="${s.aspectH}">
           </div>
         </div>
 
-        <div class="flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
-          <button type="button" class="btn btn-ghost btn-xs btn-circle text-slate-400 hover:text-white toggle-visibility-btn" data-id="${device.id}" title="Toggle Visibility">
-            ${device.visible 
-              ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                 </svg>` 
-              : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-slate-600">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M21 21l-3.486-3.486m0 0a9 9 0 0 0 3.429-5.514C19.734 7.72 15.72 4.5 12 4.5c-1.353 0-2.637.243-3.829.686M12 9a3 3 0 0 0-3 3M12 15a2.99 2.99 0 0 0 2.855-2.036" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18" />
-                 </svg>`
-            }
-          </button>
-          
-          <button type="button" class="btn btn-ghost btn-xs btn-circle text-slate-500 hover:text-red-400 delete-btn" data-id="${device.id}" title="Delete Device">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-            </svg>
-          </button>
+        <div class="flex gap-2 items-center">
+          <label class="text-[10px] text-slate-500">Color:</label>
+          <input type="color" class="w-6 h-5 rounded cursor-pointer border border-slate-850 bg-transparent inp-color" data-id="${s.id}" value="${s.color}">
         </div>
       `;
 
-      item.querySelector('.toggle-visibility-btn')!.addEventListener('click', (e) => {
-        e.stopPropagation();
-        device.visible = !device.visible;
-        updateUI();
+      // Events
+      card.querySelector('.btn-del')!.addEventListener('click', () => deleteScreen(s.id));
+      
+      card.querySelector('.inp-diag')!.addEventListener('input', (e) => {
+        const val = parseFloat((e.target as HTMLInputElement).value);
+        if (!isNaN(val) && val > 0) updateScreen(s.id, 'diagonal', val);
+      });
+      
+      card.querySelector('.inp-w')!.addEventListener('input', (e) => {
+        const val = parseFloat((e.target as HTMLInputElement).value);
+        if (!isNaN(val) && val > 0) updateScreen(s.id, 'aspectW', val);
       });
 
-      item.querySelector('.delete-btn')!.addEventListener('click', (e) => {
-        e.stopPropagation();
-        devices = devices.filter(d => d.id !== device.id);
-        if (selectedDeviceId === device.id) {
-          selectedDeviceId = devices.length > 0 ? devices[0].id : null;
-        }
-        updateUI();
+      card.querySelector('.inp-h')!.addEventListener('input', (e) => {
+        const val = parseFloat((e.target as HTMLInputElement).value);
+        if (!isNaN(val) && val > 0) updateScreen(s.id, 'aspectH', val);
       });
 
-      deviceListContainer.appendChild(item);
+      card.querySelector('.inp-color')!.addEventListener('input', (e) => {
+        updateScreen(s.id, 'color', (e.target as HTMLInputElement).value);
+      });
+
+      container.appendChild(card);
     });
   }
 
-  // Populate Configurator fields from current state
-  function renderConfigurator() {
-    if (!selectedDeviceId) {
-      deviceForm.classList.add('opacity-40', 'pointer-events-none');
-      return;
-    }
-    deviceForm.classList.remove('opacity-40', 'pointer-events-none');
-
-    const device = devices.find(d => d.id === selectedDeviceId);
-    if (!device) return;
-
-    devNameInput.value = device.name;
-    devDiagonalRange.value = device.diagonal.toString();
-    devDiagonalNum.value = device.diagonal.toFixed(2);
-    diagonalValueText.textContent = `${device.diagonal.toFixed(2)}"`;
-    devAspectWInput.value = device.aspectWidth.toString();
-    devAspectHInput.value = device.aspectHeight.toString();
-    devResWInput.value = device.resW ? device.resW.toString() : '';
-    devResHInput.value = device.resH ? device.resH.toString() : '';
-    devColorInput.value = device.color;
-    devPresetSelect.value = "";
-  }
-
-  // Main Canvas Rendering
-  function renderVisualization() {
-    visualCanvas.innerHTML = '';
+  function renderVisuals() {
+    canvas.innerHTML = '';
     
-    const visibleDevices = devices.filter(d => d.visible);
-    if (visibleDevices.length === 0) {
-      emptyCanvasMsg.classList.remove('hidden');
-      return;
-    }
-    emptyCanvasMsg.classList.add('hidden');
+    if (screens.length === 0) return;
 
-    const canvasW = visualCanvas.clientWidth;
-    const canvasH = visualCanvas.clientHeight;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
     
-    const renderW = canvasW - 80;
-    const renderH = canvasH - 80;
+    const margin = 40;
+    const renderW = width - margin;
+    const renderH = height - margin;
 
-    const items = visibleDevices.map(device => {
-      const dims = calculateDimensions(device);
-      return {
-        device,
-        wInches: dims.widthInches,
-        hInches: dims.heightInches,
-        color: device.color
-      };
-    });
+    // Get physical dimensions
+    const items = screens.map(s => ({
+      id: s.id,
+      color: s.color,
+      diagonal: s.diagonal,
+      aspectW: s.aspectW,
+      aspectH: s.aspectH,
+      dims: getDims(s)
+    }));
 
-    let scale = 1;
-
-    if (scaleMode === 'fit') {
-      if (viewMode === 'overlay') {
-        const maxW = Math.max(...items.map(item => item.wInches));
-        const maxH = Math.max(...items.map(item => item.hInches));
-        
-        const scaleX = renderW / maxW;
-        const scaleY = renderH / maxH;
-        scale = Math.min(scaleX, scaleY);
-      } else {
-        // Side by side
-        const gapInches = 0.5;
-        const totalW = items.reduce((sum, item) => sum + item.wInches, 0) + (items.length - 1) * gapInches;
-        const maxH = Math.max(...items.map(item => item.hInches));
-        
-        const scaleX = renderW / totalW;
-        const scaleY = renderH / maxH;
-        scale = Math.min(scaleX, scaleY);
-      }
-    } else {
-      scale = calibratedPPI;
-    }
-
-    // Set flex layout alignment based on scale mode
-    if (scaleMode === 'fit') {
-      visualCanvas.style.justifyContent = 'center';
-      visualCanvas.style.alignItems = 'center';
-      visualCanvas.style.flexWrap = 'nowrap';
-    } else {
-      visualCanvas.style.justifyContent = 'flex-start';
-      visualCanvas.style.alignItems = 'flex-start';
-    }
-
-    let currentLeft = 40;
-    const gapPx = 0.5 * scale;
+    // Find scale: fit the largest width/height
+    const maxW = Math.max(...items.map(item => item.dims.w));
+    const maxH = Math.max(...items.map(item => item.dims.h));
     
-    if (scaleMode === 'fit' && viewMode === 'side-by-side') {
-      const totalWidthPx = items.reduce((sum, item) => sum + (item.wInches * scale), 0) + (items.length - 1) * gapPx;
-      currentLeft = (canvasW - totalWidthPx) / 2;
-    }
+    const scaleX = renderW / maxW;
+    const scaleY = renderH / maxH;
+    const scale = Math.min(scaleX, scaleY);
 
-    items.forEach((item, index) => {
-      const wPx = item.wInches * scale;
-      const hPx = item.hInches * scale;
-      const isSelected = item.device.id === selectedDeviceId;
+    items.forEach((item, idx) => {
+      const wPx = item.dims.w * scale;
+      const hPx = item.dims.h * scale;
 
       const el = document.createElement('div');
-      el.className = `absolute rounded-2xl shadow-2xl transition-all duration-300 flex flex-col justify-between p-3 border-2 overflow-hidden cursor-pointer ${
-        isSelected ? 'z-30 ring-2 ring-indigo-500/50' : 'z-10 hover:z-20 hover:scale-[1.01]'
-      }`;
-
-      if (renderBezels) {
-        const bezelWidth = Math.max(2, Math.round(0.08 * scale));
-        el.style.borderWidth = `${bezelWidth}px`;
-        el.style.borderColor = '#18181b';
-        el.style.boxShadow = `0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 0 2px ${item.color}`;
-      } else {
-        el.style.borderWidth = '2px';
-        el.style.borderColor = item.color;
-        el.style.boxShadow = `0 20px 25px -5px rgba(0, 0, 0, 0.4), inset 0 0 12px ${item.color}22`;
-      }
-
-      el.style.background = `radial-gradient(circle at top, ${item.color}15 0%, #090d16 100%)`;
+      el.className = "absolute border-2 transition-all duration-200 flex flex-col justify-between p-2 pointer-events-none";
+      el.style.borderColor = item.color;
+      el.style.background = `${item.color}0a`;
       el.style.width = `${wPx}px`;
       el.style.height = `${hPx}px`;
-
-      if (viewMode === 'overlay') {
-        if (alignment === 'center') {
-          el.style.left = `${(canvasW - wPx) / 2}px`;
-          el.style.top = `${(canvasH - hPx) / 2}px`;
-        } else if (alignment === 'bottom-left') {
-          el.style.left = '40px';
-          el.style.top = `${canvasH - 40 - hPx}px`;
-        } else {
-          el.style.left = '40px';
-          el.style.top = '40px';
-        }
-      } else {
-        el.style.left = `${currentLeft}px`;
-        if (scaleMode === 'fit') {
-          el.style.top = `${canvasH - 40 - hPx}px`;
-        } else {
-          el.style.top = '40px';
-        }
-        currentLeft += wPx + gapPx;
-      }
-
-      // Notch
-      let notchHTML = '';
-      if (renderBezels && wPx > 80 && hPx > 150) {
-        const notchW = 0.85 * scale;
-        const notchH = 0.22 * scale;
-        notchHTML = `
-          <div class="absolute top-2 left-1/2 -translate-x-1/2 rounded-full bg-zinc-950 border border-zinc-900 shadow-inner flex items-center justify-center pointer-events-none" style="width: ${notchW}px; height: ${notchH}px; z-index: 100;">
-            <div class="w-1.5 h-1.5 rounded-full bg-slate-900 ml-auto mr-3 border border-indigo-900/30"></div>
-          </div>
-        `;
-      }
+      
+      // Center the overlay
+      el.style.left = `${(width - wPx) / 2}px`;
+      el.style.top = `${(height - hPx) / 2}px`;
 
       el.innerHTML = `
-        ${notchHTML}
-        <div class="z-10 select-none flex items-start justify-between w-full pointer-events-none">
-          <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md text-white border truncate max-w-[85%]" style="background-color: ${item.color}33; border-color: ${item.color}55;">
-            ${item.device.name || 'Device'}
-          </span>
-          <span class="text-[9px] font-bold text-slate-500 bg-slate-950/80 px-1.5 py-0.5 rounded-md">
-            #${index + 1}
-          </span>
+        <div class="text-[9px] font-bold" style="color: ${item.color}">#${idx + 1} (${item.diagonal.toFixed(1)}")</div>
+        <div class="text-[9px] text-slate-400 text-center pointer-events-none">
+          ${item.dims.w.toFixed(1)}" x ${item.dims.h.toFixed(1)}"
+          <div class="text-[8px] text-slate-500">${item.dims.area.toFixed(1)} sq in</div>
         </div>
-
-        <div class="z-10 flex flex-col items-center justify-center text-center select-none py-4 pointer-events-none">
-          <span class="text-xl md:text-2xl font-black text-white drop-shadow-md">
-            ${item.device.diagonal.toFixed(1)}<span class="text-slate-400 font-medium">"</span>
-          </span>
-          <span class="text-[10px] text-slate-400 font-semibold tracking-wide uppercase mt-0.5">
-            ${item.device.aspectWidth}:${item.device.aspectHeight}
-          </span>
-        </div>
-
-        <div class="z-10 select-none flex flex-col gap-0.5 w-full bg-slate-950/60 p-1.5 rounded-lg border border-slate-900/40 pointer-events-none">
-          <div class="flex justify-between text-[9px] font-semibold">
-            <span class="text-slate-500">Specs:</span>
-            <span class="text-slate-300">${item.wInches.toFixed(2)}" x ${item.hInches.toFixed(2)}"</span>
-          </div>
-          <div class="flex justify-between text-[9px] font-semibold">
-            <span class="text-slate-500">Area:</span>
-            <span class="text-indigo-400 font-bold">${(item.wInches * item.hInches).toFixed(1)} in²</span>
-          </div>
-        </div>
+        <div class="text-[8px] text-right text-slate-500">${item.aspectW}:${item.aspectH}</div>
       `;
 
-      el.addEventListener('click', (e) => {
-        e.stopPropagation();
-        selectedDeviceId = item.device.id;
-        updateUI();
-      });
-
-      visualCanvas.appendChild(el);
-    });
-
-    if (scaleMode === 'real' && viewMode === 'side-by-side') {
-      const totalWidthPx = currentLeft + 80;
-      const totalHeightPx = Math.max(...items.map(item => item.hInches * scale)) + 120;
-      visualCanvas.style.minWidth = `${totalWidthPx}px`;
-      visualCanvas.style.minHeight = `${totalHeightPx}px`;
-    } else {
-      visualCanvas.style.minWidth = '100%';
-      visualCanvas.style.minHeight = '100%';
-    }
-  }
-
-  // Render Stats Table
-  function renderStatsTable() {
-    statsTableBody.innerHTML = '';
-    
-    devices.forEach((device) => {
-      const dims = calculateDimensions(device);
-      const isSelected = device.id === selectedDeviceId;
-      
-      const row = document.createElement('tr');
-      row.className = `border-b border-base-800 transition-colors ${
-        !device.visible ? 'opacity-40' : ''
-      } ${
-        isSelected ? 'bg-indigo-950/20 text-white font-semibold' : 'hover:bg-base-950/20'
-      } cursor-pointer`;
-      
-      row.addEventListener('click', () => {
-        selectedDeviceId = device.id;
-        updateUI();
-      });
-
-      row.innerHTML = `
-        <td class="flex items-center gap-2 py-3.5">
-          <div class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${device.color};"></div>
-          <span class="truncate max-w-[150px] md:max-w-none font-bold">${device.name || 'Unnamed Device'}</span>
-        </td>
-        <td class="text-center font-bold text-slate-100">${device.diagonal.toFixed(2)}"</td>
-        <td class="text-center text-slate-400 font-semibold">${device.aspectWidth}:${device.aspectHeight} <span class="text-[10px] text-slate-500">(${dims.ratioStr})</span></td>
-        <td class="text-center text-slate-300">
-          <div>${dims.widthInches.toFixed(2)}" x ${dims.heightInches.toFixed(2)}"</div>
-          <div class="text-[10px] text-slate-500">${dims.widthCm.toFixed(1)} cm x ${dims.heightCm.toFixed(1)} cm</div>
-        </td>
-        <td class="text-center">
-          <div class="font-bold text-indigo-400">${dims.areaSqInches.toFixed(2)} sq in</div>
-          <div class="text-[10px] text-slate-500">${dims.areaSqCm.toFixed(1)} cm²</div>
-        </td>
-        <td class="text-center">
-          ${dims.ppi > 0 
-            ? `<div>${Math.round(dims.ppi)} PPI</div>
-               <div class="text-[9px] text-slate-500">${((device.resW! * device.resH!) / 1000000).toFixed(2)} MP</div>`
-            : '<span class="text-slate-600">—</span>'
-          }
-        </td>
-      `;
-
-      statsTableBody.appendChild(row);
+      canvas.appendChild(el);
     });
   }
 
-  // Update comparison summary text
-  function updateComparisonSummary() {
-    const visible = devices.filter(d => d.visible);
-    if (visible.length < 2) {
-      comparisonSummaryText.innerHTML = `Add/enable at least <strong>two</strong> devices to see size comparison summaries.`;
-      return;
-    }
+  // Handle window resizing
+  let resizeTimer: any;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(renderVisuals, 100);
+  });
 
-    const dev1 = visible[0];
-    const dev2 = visible[1];
-    const dims1 = calculateDimensions(dev1);
-    const dims2 = calculateDimensions(dev2);
-
-    const diffArea = dims1.areaSqInches - dims2.areaSqInches;
-    const diffPct = (Math.abs(diffArea) / Math.min(dims1.areaSqInches, dims2.areaSqInches)) * 100;
-
-    let text = "";
-    if (diffArea > 0.05) {
-      text = `<strong>${dev1.name}</strong> has a <strong>${diffPct.toFixed(1)}% larger</strong> screen area than <strong>${dev2.name}</strong> (${dims1.areaSqInches.toFixed(1)} vs ${dims2.areaSqInches.toFixed(1)} sq inches).`;
-    } else if (diffArea < -0.05) {
-      text = `<strong>${dev2.name}</strong> has a <strong>${diffPct.toFixed(1)}% larger</strong> screen area than <strong>${dev1.name}</strong> (${dims2.areaSqInches.toFixed(1)} vs ${dims1.areaSqInches.toFixed(1)} sq inches).`;
-    } else {
-      text = `<strong>${dev1.name}</strong> and <strong>${dev2.name}</strong> have virtually <strong>identical</strong> screen areas (~${dims1.areaSqInches.toFixed(1)} sq inches).`;
-    }
-
-    comparisonSummaryText.innerHTML = text;
-  }
-
-  // Event Listeners Setup
-  function setupEventListeners() {
-    // Add new device
-    addDeviceBtn.addEventListener('click', () => {
-      const uniqueId = `dev-${Date.now()}`;
-      const colorPresets = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
-      const randColor = colorPresets[devices.length % colorPresets.length];
-      
-      const newDev: Device = {
-        id: uniqueId,
-        name: `Custom Screen ${devices.length + 1}`,
-        diagonal: 6.0,
-        aspectWidth: 19.5,
-        aspectHeight: 9,
-        color: randColor,
-        visible: true
-      };
-
-      devices.push(newDev);
-      selectedDeviceId = uniqueId;
-      updateUI();
-    });
-
-    // Device Name input
-    devNameInput.addEventListener('input', () => {
-      if (!selectedDeviceId) return;
-      const dev = devices.find(d => d.id === selectedDeviceId);
-      if (dev) {
-        dev.name = devNameInput.value;
-        renderDeviceList();
-        renderStatsTable();
-        updateComparisonSummary();
-        saveState();
-      }
-    });
-
-    // Preset selector
-    devPresetSelect.addEventListener('change', () => {
-      if (!selectedDeviceId || devPresetSelect.value === "") return;
-      const dev = devices.find(d => d.id === selectedDeviceId);
-      const presetIdx = parseInt(devPresetSelect.value, 10);
-      const preset = DEVICE_PRESETS[presetIdx];
-      
-      if (dev && preset) {
-        dev.name = preset.name;
-        dev.diagonal = preset.diagonal;
-        dev.aspectWidth = preset.aspectWidth;
-        dev.aspectHeight = preset.aspectHeight;
-        dev.resW = preset.resW;
-        dev.resH = preset.resH;
-        dev.color = preset.color;
-        
-        updateUI();
-      }
-    });
-
-    // Diagonal slider & number box
-    devDiagonalRange.addEventListener('input', () => {
-      if (!selectedDeviceId) return;
-      const dev = devices.find(d => d.id === selectedDeviceId);
-      if (dev) {
-        const val = parseFloat(devDiagonalRange.value);
-        dev.diagonal = val;
-        devDiagonalNum.value = val.toFixed(2);
-        diagonalValueText.textContent = `${val.toFixed(2)}"`;
-        renderDeviceList();
-        renderVisualization();
-        renderStatsTable();
-        updateComparisonSummary();
-        saveState();
-      }
-    });
-
-    devDiagonalNum.addEventListener('input', () => {
-      if (!selectedDeviceId) return;
-      const dev = devices.find(d => d.id === selectedDeviceId);
-      if (dev) {
-        let val = parseFloat(devDiagonalNum.value);
-        if (isNaN(val)) return;
-        if (val < 1) val = 1;
-        if (val > 50) val = 50;
-        dev.diagonal = val;
-        devDiagonalRange.value = val.toString();
-        diagonalValueText.textContent = `${val.toFixed(2)}"`;
-        renderDeviceList();
-        renderVisualization();
-        renderStatsTable();
-        updateComparisonSummary();
-        saveState();
-      }
-    });
-
-    // Aspect Ratio inputs
-    const handleAspectChange = () => {
-      if (!selectedDeviceId) return;
-      const dev = devices.find(d => d.id === selectedDeviceId);
-      if (dev) {
-        const w = parseFloat(devAspectWInput.value);
-        const h = parseFloat(devAspectHInput.value);
-        if (!isNaN(w) && w > 0 && !isNaN(h) && h > 0) {
-          dev.aspectWidth = w;
-          dev.aspectHeight = h;
-          renderDeviceList();
-          renderVisualization();
-          renderStatsTable();
-          updateComparisonSummary();
-          saveState();
-        }
-      }
-    };
-    devAspectWInput.addEventListener('input', handleAspectChange);
-    devAspectHInput.addEventListener('input', handleAspectChange);
-
-    // Aspect preset buttons
-    document.querySelectorAll('.aspect-preset').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const target = e.currentTarget as HTMLButtonElement;
-        const w = parseFloat(target.dataset.w!);
-        const h = parseFloat(target.dataset.h!);
-        
-        devAspectWInput.value = w.toString();
-        devAspectHInput.value = h.toString();
-        handleAspectChange();
-      });
-    });
-
-    // Resolutions
-    const handleResChange = () => {
-      if (!selectedDeviceId) return;
-      const dev = devices.find(d => d.id === selectedDeviceId);
-      if (dev) {
-        const w = parseInt(devResWInput.value, 10);
-        const h = parseInt(devResHInput.value, 10);
-        if (!isNaN(w) && w > 0 && !isNaN(h) && h > 0) {
-          dev.resW = w;
-          dev.resH = h;
-        } else {
-          dev.resW = undefined;
-          dev.resH = undefined;
-        }
-        renderStatsTable();
-        saveState();
-      }
-    };
-    devResWInput.addEventListener('input', handleResChange);
-    devResHInput.addEventListener('input', handleResChange);
-
-    // Color Inputs
-    devColorInput.addEventListener('input', () => {
-      if (!selectedDeviceId) return;
-      const dev = devices.find(d => d.id === selectedDeviceId);
-      if (dev) {
-        dev.color = devColorInput.value;
-        renderDeviceList();
-        renderVisualization();
-        renderStatsTable();
-        saveState();
-      }
-    });
-
-    document.querySelectorAll('.color-preset').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const target = e.currentTarget as HTMLButtonElement;
-        const color = target.dataset.color!;
-        devColorInput.value = color;
-        if (selectedDeviceId) {
-          const dev = devices.find(d => d.id === selectedDeviceId);
-          if (dev) {
-            dev.color = color;
-            renderDeviceList();
-            renderVisualization();
-            renderStatsTable();
-            saveState();
-          }
-        }
-      });
-    });
-
-    // View Mode Switcher
-    const alignmentControlGroup = document.getElementById('alignment-control-group')!;
-    document.querySelectorAll('#view-mode-tabs .tab').forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        document.querySelectorAll('#view-mode-tabs .tab').forEach(t => t.classList.remove('active', 'text-white'));
-        const target = e.currentTarget as HTMLButtonElement;
-        target.classList.add('active', 'text-white');
-        viewMode = target.dataset.mode as any;
-        
-        if (viewMode === 'side-by-side') {
-          alignmentControlGroup.classList.add('opacity-30', 'pointer-events-none');
-        } else {
-          alignmentControlGroup.classList.remove('opacity-30', 'pointer-events-none');
-        }
-
-        renderVisualization();
-        saveState();
-      });
-    });
-
-    // Alignment Switcher
-    document.querySelectorAll('#align-tabs .tab').forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        document.querySelectorAll('#align-tabs .tab').forEach(t => t.classList.remove('active', 'text-white'));
-        const target = e.currentTarget as HTMLButtonElement;
-        target.classList.add('active', 'text-white');
-        alignment = target.dataset.align as any;
-        renderVisualization();
-        saveState();
-      });
-    });
-
-    // Scale Switcher
-    document.querySelectorAll('#scale-tabs .tab').forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        document.querySelectorAll('#scale-tabs .tab').forEach(t => t.classList.remove('active', 'text-white'));
-        const target = e.currentTarget as HTMLButtonElement;
-        target.classList.add('active', 'text-white');
-        scaleMode = target.dataset.scale as any;
-
-        if (scaleMode === 'real') {
-          calibrationContainer.classList.remove('hidden');
-          updateVirtualCard();
-        } else {
-          calibrationContainer.classList.add('hidden');
-        }
-
-        renderVisualization();
-        saveState();
-      });
-    });
-
-    // Calibration Slider
-    calibrationSlider.addEventListener('input', () => {
-      calibratedPPI = parseInt(calibrationSlider.value, 10);
-      ppiValueLabel.textContent = `${calibratedPPI} PPI`;
-      updateVirtualCard();
-      if (scaleMode === 'real') {
-        renderVisualization();
-      }
-      saveState();
-    });
-
-    // Bezels toggle
-    renderBezelsChk.addEventListener('change', () => {
-      renderBezels = renderBezelsChk.checked;
-      renderVisualization();
-      saveState();
-    });
-
-    // Recalculate canvas on window resize
-    let resizeTimer: any;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        renderVisualization();
-      }, 100);
-    });
-  }
-
-  // Update virtual credit card dimensions
-  function updateVirtualCard() {
-    const cardW = 3.37 * calibratedPPI;
-    const cardH = 2.125 * calibratedPPI;
-    virtualCreditCard.style.width = `${cardW}px`;
-    virtualCreditCard.style.height = `${cardH}px`;
-  }
-
-  // Run on page load
   init();
 </script>
